@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Touchy by fisherwebdev</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Touchy</h1>
+        <p>jQuery plugin for touch events</p>
+        <p class="view"><a href="https://github.com/fisherwebdev/touchy">View the Project on GitHub <small>fisherwebdev/touchy</small></a></p>
+        <ul>
+          <li><a href="https://github.com/fisherwebdev/touchy/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/fisherwebdev/touchy/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/fisherwebdev/touchy">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Touchy</h1>
+
+<p>Touchy is a jQuery plugin for managing touch and gesture events on WebKit browsers, such as Mobile Safari or Android Browser, or any browser that supports the ontouchstart, ontouchmove and ontouchend events.  </p>
+
+<p>It creates new custom events that a programmer may utilize at a high level, such as "touchy-pinch" and "touchy-rotate" among others, and thus avoid the low-level work of combining touch and gesture events to achieve these common gestural controls.</p>
+
+<p>The minified file size is ~9.52KB (~2.72KB gzipped)</p>
+
+<h2>Example Usage</h2>
+
+<p>First, load Touchy after jQuery.  Touchy requires jQuery 1.4.2+.</p>
+
+<div class="highlight">
+<pre><span class="nt">&lt;body&gt;</span>
+    <span class="c">&lt;!-- content --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"path/to/my/js/jquery.touchy.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre>
+</div>
+
+
+<p>Then bind a Touchy event to a handler.</p>
+
+<div class="highlight">
+<pre><span class="kd">var</span> <span class="nx">handleTouchyPinch</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">$target</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$target</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="s1">'webkitTransform'</span><span class="o">:</span><span class="s1">'scale('</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">scale</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">scale</span> <span class="o">+</span> <span class="s1">')'</span><span class="p">});</span>
+<span class="p">};</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'#my_div'</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'touchy-pinch'</span><span class="p">,</span> <span class="nx">handleTouchyPinch</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<h2>Touchy Events</h2>
+
+<p>Touchy currently enables the use of the following events:</p>
+
+<ul>
+<li>touchy-longpress</li>
+<li>touchy-drag</li>
+<li>touchy-pinch</li>
+<li>touchy-rotate</li>
+<li>touchy-swipe</li>
+</ul><p>These events are triggered by user interactions with a specific "phase" of the user's gesture passed to the event handler.  A touchy-drag event, for example, will be triggered when the user first touches the bound element, when the user drags his or her finger across the screen, and when the user stops touching the screen.</p>
+
+<p>The events are all prefixed with "touchy-" to avoid name collision.</p>
+
+<h2>Data Passed to Event Handlers</h2>
+
+<p>The general pattern of the arguments passed to an event handler is as follows:</p>
+
+<div class="highlight">
+<pre><span class="nx">handleTouchyEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">phase</span><span class="p">,</span> <span class="nx">$target</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<ul>
+<li>event (Object) - a jQuery event object.</li>
+<li>phase (String) - the phase of the user gesture: "start", "move", "end".</li>
+<li>$target (Object) - a jQuery object wrapping the event target</li>
+<li>data (Object) - a JSON object with additional information about the user gesture.<br>
+</li>
+</ul><p>However, there are exceptions to this pattern.  Please see below.</p>
+
+<h3>touchy-longpress</h3>
+
+<p>phase: "start" or "end"
+(No data object)</p>
+
+<h3>touchy-drag</h3>
+
+<p>phase: "start", "move" or "end"</p>
+
+<p>data:</p>
+
+<ul>
+<li>movePoint</li>
+<li>lastMovePoint</li>
+<li>startPoint</li>
+<li>velocity</li>
+</ul><p>Points are JSON objects containing "x" and "y" pixel-based properties, relative to the page.
+Velocity is the distance / time measured in pixels and milliseconds, based on the last two ontouchmove events.</p>
+
+<h3>touchy-pinch</h3>
+
+<p>(No phase.  All events are essentially within the "move" phase.)</p>
+
+<p>data:</p>
+
+<ul>
+<li>scale</li>
+<li>previousScale</li>
+<li>currentPoint</li>
+<li>startPoint</li>
+<li>startDistance</li>
+</ul><p>Scale is the percentage of the current distance between the two fingers, relative to the start distance.
+Points are JSON objects containing "x" and "y" pixel-based properties, relative to the page.
+The startDistance is measured in pixels.</p>
+
+<h3>touchy-rotate</h3>
+
+<p>phase: "start", "move" and "end"</p>
+
+<p>data:</p>
+
+<ul>
+<li>startPoint</li>
+<li>startDate ("move" and "end" phase only)</li>
+<li>movePoint</li>
+<li>lastMovePoint</li>
+<li>degrees</li>
+<li>degreeDelta ("move" and "end" phase only)</li>
+<li>velocity</li>
+</ul><p>Points are JSON objects containing "x" and "y" pixel-based properties, relative to the page.
+Velocity is the distance / time measured in pixels and milliseconds, based on the last two ontouchmove events.</p>
+
+<h3>touchy-swipe</h3>
+
+<p>(No phase.  Swipe triggers only once.  See configurations.)</p>
+
+<p>data:</p>
+
+<ul>
+<li>direction: "left", "right", "up", "down"</li>
+<li>movePoint</li>
+<li>lastMovePoint</li>
+<li>startPoint</li>
+<li>velocity</li>
+</ul><p>Points are JSON objects containing "x" and "y" pixel-based properties, relative to the page.
+Velocity is the distance / time measured in pixels and milliseconds, based on the last two ontouchmove events.</p>
+
+<h2>Overriding Default Configuration Settings</h2>
+
+<p>Touchy configurations are stored within the bound element's jQuery data object.  One may override default configurations by assigning new values to properties within the data object after the element is bound to a touchy event.</p>
+
+<p>Example:</p>
+
+<div class="highlight">
+<pre><span class="nx">$</span><span class="p">(</span><span class="s1">'#my_div'</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'touchy-rotate'</span><span class="p">,</span> <span class="nx">handleTouchyRotate</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'#my_div'</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">'touchyRotate'</span><span class="p">).</span><span class="nx">settings</span><span class="p">.</span><span class="nx">requiredTouches</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</pre>
+</div>
+
+
+<p>As shown in the example, the settings are accessed through the camelCased name of the event.  All events except touchy-pinch require one finger touch by default, but may be configured to require more.</p>
+
+<h3>touchy-longpress</h3>
+
+<ul>
+<li>requiredTouches: 1</li>
+<li>msThresh: 800 (the number of milliseconds the user must touch the element before the event is fired)</li>
+<li>triggerStartPhase: false (whether to trigger the event during the start phase)</li>
+</ul><h3>touchy-drag</h3>
+
+<ul>
+<li>requiredTouches: 1</li>
+<li>msHoldThresh: 100 (a threshold before engaging drag, to avoid conflict with tapping gestures)</li>
+</ul><h3>touchy-pinch</h3>
+
+<ul>
+<li>pxThresh: 0 (a pixel-based distance threshold that may be used to prevent the event from firing)</li>
+</ul><h3>touchy-rotate</h3>
+
+<ul>
+<li>requiredTouches: 1</li>
+</ul><h3>touchy-swipe</h3>
+
+<ul>
+<li>requiredTouches: 1</li>
+<li>velocityThresh: 1 (required velocity to fire the event)</li>
+<li>triggerOn: "touchmove" (or "touchend".  By default, as soon as the velocity is reached, the event fires.)</li>
+</ul><h2>Using event delegation</h2>
+
+<p>By default, Touchy events are <strong>not</strong> able to be bound on ancestors of the target elements in a typical "event delegation" design pattern.  One may configure Touchy to do this, but unlike normal event delegation, it is computationally expensive.</p>
+
+<p>To use event delegation:</p>
+
+<div class="highlight">
+<pre><span class="nx">$</span><span class="p">.</span><span class="nx">touchyOptions</span><span class="p">.</span><span class="nx">useDelegation</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</pre>
+</div>
+
+
+<p>Note that this is a global operation affecting all Touchy events.</p>
+
+<p><strong>enjoy!</strong></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/fisherwebdev">fisherwebdev</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
